@@ -5,7 +5,15 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include<windows.h>
+
 using namespace std;
+
+void SetColor(int text, int bg) {
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((bg << 4) | text));
+}
+
 
 
 string imagine_chislo()
@@ -78,24 +86,50 @@ bool is_normal(string to_check)
 	return is_normal;
 }
 
+void coloring(string number,string g_number) {
+	for (int i = 0; i < number.length(); i++)
+	{
+
+		if (g_number[i] == number[i]) {
+			SetColor(7, 2);
+			cout << g_number[i];
+		}
+
+		else if (number.find(g_number[i]) != string::npos) {
+			SetColor(7, 4);
+			cout << g_number[i];
+		}
+
+		else {
+			SetColor(7, 0);
+			cout << g_number[i];
+		}
+		SetColor(7, 0);
+	}
+	cout << endl;
+}
+
 int main()
 {
    srand(time(NULL));
-   /*for (int i = 0; i < 20; i++)
-   {
-
-	   string number = imagine_chislo();
-	   
-   }*/
-
    string number = imagine_chislo();
    cout << "number was imagined" << endl;
-   
+   //cout << number << endl;
 
    cout << "try to gues:";
    string g_number;
-   do{
+   
+   do {
+
+	do{
+
 	   cin >> g_number;
-   } while (!is_normal(g_number));
-   cout << g_number;
+	   
+
+	} while (!is_normal(g_number));
+	   
+	coloring(number, g_number);
+   } while (g_number != number);
+   cout << "You gues!!! You win!!!";
 }
+
